@@ -39,8 +39,7 @@ public class RadarComponent extends JComponent
      */
     public Dimension getPreferredSize()
     {
-        // the component needs to be large enough to encapsulate two grids side by side
-        final int WIDTH = radar.getNumCols() * CELL_WIDTH * 2;
+        final int WIDTH = radar.getNumCols() * CELL_WIDTH;
         final int HEIGHT = radar.getNumRows() * CELL_HEIGHT;
         return new Dimension(WIDTH, HEIGHT);
     }
@@ -90,26 +89,5 @@ public class RadarComponent extends JComponent
         
         // draw the image for the accumulated radar data to the right of the current scan image
         final int X_OFFSET = cols * CELL_WIDTH;
-        
-        // draw the image for the accumulated radar scans
-        for(int row = 0; row < rows; row++)
-        {
-            for(int col = 0; col < cols; col++)
-            {
-                int x = X_OFFSET + col * CELL_WIDTH ;
-                int y = row * CELL_HEIGHT ;
-                
-                Rectangle2D.Double rect = new Rectangle2D.Double(x, y, CELL_WIDTH , CELL_HEIGHT );
-                
-                float pixelValue = (float)(radar.getAccumulatedDetection(row, col)) / radar.getNumScans();
-
-                // due to floating-point rounding issues, pixelValue can end up slightly greater than 1.0
-                //  we'll cap it since the Color constructor requires values <= 1.0
-                pixelValue = Math.min(pixelValue, 1.0f);
-                
-                g2.setColor(new Color(pixelValue, pixelValue, pixelValue));
-                g2.fill(rect);
-            }
-        }
     }
 }
